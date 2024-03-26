@@ -78,6 +78,14 @@ def search(args):
                     print(f"{pagenum+1}:{i+1}: {colorize(l, *match.span())}")
 
 
+def dumptext(args):
+    with open(args.input, "rb") as ifd, open(args.output, "w") as ofd:
+        for page in PdfReader(ifd).pages:
+            ofd.write(page.extract_text())
+            if args.sep:
+                ofd.write(f'\n{args.sep}\n')
+
+
 def join(args):
     merger = PdfMerger()
     for pdf in args.inputs:
@@ -181,6 +189,12 @@ def main():
     search_parser.add_argument("input", help="Input PDF file")
     search_parser.add_argument("pattern", help="Text/regex to search")
     search_parser.add_argument("--case_insensitive", "-i", action="store_true", help="Case insensitive search")
+
+    dumptext_parser = subparsers.add_parser("dumptext", help="Dump text from PDF to a text file")
+    dumptext_parser.set_defaults(func=dumptext)
+    dumptext_parser.add_argument("input", help="Input PDF file")
+    dumptext_parser.add_argument("output", help="Output text file")
+    dumptext_parser.add_argument("--sep", help="Separator between pages", default="")
 
     args = parser.parse_args()
     if getattr(args, 'output', None):
