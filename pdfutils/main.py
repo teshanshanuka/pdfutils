@@ -1,5 +1,6 @@
 import argparse
 import os
+from contextlib import nullcontext
 
 from PyPDF2 import PdfWriter, PdfReader, PdfMerger
 
@@ -79,11 +80,11 @@ def search(args):
 
 
 def dumptext(args):
-    with open(args.input, "rb") as ifd, open(args.output, "w") as ofd:
+    with open(args.input, "rb") as ifd, open(args.output, "w") if args.output else nullcontext() as ofd :
         for page in PdfReader(ifd).pages:
-            ofd.write(page.extract_text())
+            print(page.extract_text(), file=ofd)
             if args.sep:
-                ofd.write(f'\n{args.sep}\n')
+                print(f'\n{args.sep}\n', file=ofd)
 
 
 def join(args):
@@ -193,7 +194,7 @@ def main():
     dumptext_parser = subparsers.add_parser("dumptext", help="Dump text from PDF to a text file")
     dumptext_parser.set_defaults(func=dumptext)
     dumptext_parser.add_argument("input", help="Input PDF file")
-    dumptext_parser.add_argument("output", help="Output text file")
+    dumptext_parser.add_argument("output", nargs="?", help="Output text file. If not specified, output to stdout")
     dumptext_parser.add_argument("--sep", help="Separator between pages", default="")
 
     args = parser.parse_args()
