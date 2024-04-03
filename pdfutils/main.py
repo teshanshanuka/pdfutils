@@ -2,7 +2,7 @@ import argparse
 import os
 from contextlib import nullcontext
 
-from PyPDF2 import PdfWriter, PdfReader, PdfMerger
+from pypdf import PdfWriter, PdfReader, PdfMerger
 
 RED = "\033[0;31m"
 ENDC = "\033[0m"

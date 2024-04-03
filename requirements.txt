@@ -1,2 +1,2 @@
 pillow
-PyPDF2
+pypdf
