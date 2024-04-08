@@ -191,7 +191,7 @@ def main():
     search_parser.add_argument("pattern", help="Text/regex to search")
     search_parser.add_argument("--case_insensitive", "-i", action="store_true", help="Case insensitive search")
 
-    dumptext_parser = subparsers.add_parser("dumptext", help="Dump text from PDF to a text file")
+    dumptext_parser = subparsers.add_parser("dumptext", help="Dump text from PDF to a text file or stdout")
     dumptext_parser.set_defaults(func=dumptext)
     dumptext_parser.add_argument("input", help="Input PDF file")
     dumptext_parser.add_argument("output", nargs="?", help="Output text file. If not specified, output to stdout")

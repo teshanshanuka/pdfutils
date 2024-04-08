@@ -24,6 +24,7 @@ subcommands:
     scale               Scale specific pages in a PDF
     rotate              Rotate specific pages in a PDF
     search              Search for text in a PDF
+    dumptext            Dump text from PDF to a text file or stdout
 
 options:
   -h, --help            show this help message and exit
