@@ -138,6 +138,17 @@ def pick(args):
         output.write(ofd)
 
 
+def compress(args):
+    writer = PdfWriter(clone_from=args.input)
+
+    for page in writer.pages:
+        for img in page.images:
+            img.replace(img.image, quality=args.quality)
+
+    with open(args.output, "wb") as f:
+        writer.write(f)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Some simple PDF utilities")
     subparsers = parser.add_subparsers(dest="cmd")
@@ -196,6 +207,12 @@ def main():
     dumptext_parser.add_argument("input", help="Input PDF file")
     dumptext_parser.add_argument("output", nargs="?", help="Output text file. If not specified, output to stdout")
     dumptext_parser.add_argument("--sep", help="Separator between pages", default="")
+
+    compress_parser = subparsers.add_parser("compress", help="Compress a PDF")
+    compress_parser.set_defaults(func=compress)
+    compress_parser.add_argument("input", help="Input PDF file")
+    compress_parser.add_argument("output", help="Output PDF file")
+    compress_parser.add_argument("--quality", "-q", default=80, type=int, help="Image quality (0-100)")
 
     args = parser.parse_args()
     if getattr(args, 'output', None):
